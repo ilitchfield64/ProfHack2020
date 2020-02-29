@@ -56,7 +56,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     ArrayList<Rectangle> bullets1 = new ArrayList<Rectangle>(0);
     ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
     
-    String filepath = "src/arcade/Catch the mystery 120 BPM.wav";
+    String filepath = "src/profhack2020/Catch the mystery 120 BPM.wav";
     music musicObject = new music();
     
     public Random Gen = new Random();
@@ -71,7 +71,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
         
-        //musicObject.playMusic(filepath);
+        musicObject.playMusic(filepath);
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, 162, 240);
         enemyRect = new Rectangle(0, 0, 50, 50);
         bulletBase = new Rectangle(playerRect.x + (playerRect.width/2), playerRect.y, 5, 25);
