@@ -71,7 +71,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
         
-        musicObject.playMusic(filepath);
+        //musicObject.playMusic(filepath);
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, 162, 240);
         enemyRect = new Rectangle(0, 0, 50, 50);
         bulletBase = new Rectangle(playerRect.x + (playerRect.width/2), playerRect.y, 5, 25);
