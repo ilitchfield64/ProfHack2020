@@ -214,7 +214,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         
         }
     }
-
+    
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
@@ -233,35 +233,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     
     }
 
-    
-    /*
-    public void keyPressed(KeyEvent ke) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if (ke.getKeyCode() == KeyEvent.VK_A) {
-            playerX = moveSpeed*-1;
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_D) {
-            playerX = moveSpeed;
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_W) {
-            bullets1.add(bulletBase);
-            bullets2.add(bulletBase);
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_E) {
-            System.exit(0);
-        }
-        
-    }*/
-        
-    
-    /*public void keyReleased(KeyEvent ke) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if (ke.getKeyCode() == KeyEvent.VK_A) {
-            playerX = 0;
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_D) {
-            playerX = 0;
-        }*/
     @Override
     public void keyReleased(KeyEvent ke) {
         switch (ke.getKeyCode()) {
