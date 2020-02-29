@@ -48,11 +48,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     
     int playerX = 0;
     int bulletY = 0;
-    int bulletSpeed = 3;
-    int clipSize = 3;
+    int bulletSpeed = 5; // Changed the speed to 6
+    int clipSize = 3; // Special Move counter? 
     int moveSpeed = 3;
     int starSpeed = 3;
-    
+    boolean shoot, special, left, right; // Input handling
     ArrayList<Rectangle> bullets1 = new ArrayList<Rectangle>(0);
     ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
     
@@ -94,7 +94,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void update() {
-        playerRect.x += playerX;
+        playerMovement();
+        playerRect.x += playerX; // GOING TO CHANGE THIS IT'S OWN METHOD
         bulletY = bulletSpeed * -1;
         Boarders(playerRect);
         bulletBase.x = playerRect.x + (playerRect.width/2);
@@ -200,8 +201,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         System.out.println(b);
         //this makes printing easier
     }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> ian-working
     
     public void playerMovement(){ // This method will handle movement speed
         ;
@@ -210,12 +214,19 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             playerRect.x = playerRect.x - moveSpeed;
         }
         if(right){ // This moves player right
+<<<<<<< HEAD
            // System.out.println("Right");
+=======
+          //  System.out.println("Right");
+>>>>>>> ian-working
             playerRect.x = playerRect.x + moveSpeed;
         
         }
     }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> ian-working
 
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
@@ -228,14 +239,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
+    
     @Override
     public void keyTyped(KeyEvent ke) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     
     }
 
-    @Override
+    
+    /*
     public void keyPressed(KeyEvent ke) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         if (ke.getKeyCode() == KeyEvent.VK_A) {
@@ -252,18 +264,21 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             System.exit(0);
         }
         
-    }
-
-    @Override
-    public void keyReleased(KeyEvent ke) {
+    }*/
+        
+    
+    /*public void keyReleased(KeyEvent ke) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         if (ke.getKeyCode() == KeyEvent.VK_A) {
             playerX = 0;
         }
         if (ke.getKeyCode() == KeyEvent.VK_D) {
             playerX = 0;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> ian-working
         }*/
     @Override
     public void keyReleased(KeyEvent ke) {
@@ -276,11 +291,19 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                     break;
                 case KeyEvent.VK_A:
                     left = false;
+<<<<<<< HEAD
                     //System.out.println("A Released");
                     break;
                 case KeyEvent.VK_D:
                     right = false;
                     //System.out.println("D released");
+=======
+                   // System.out.println("A Released");
+                    break;
+                case KeyEvent.VK_D:
+                    right = false;
+                  //  System.out.println("D released");
+>>>>>>> ian-working
                     break;
         }
     }
@@ -297,6 +320,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                 break;
             case KeyEvent.VK_A:
                 left = true;
+<<<<<<< HEAD
                 //System.out.println("A Pressed");
                 break;
             case KeyEvent.VK_D:
@@ -304,6 +328,14 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                 //System.out.println("D Pressed");
                 break;
 >>>>>>> Stashed changes
+=======
+              //  System.out.println("A Pressed");
+                break;
+            case KeyEvent.VK_D:
+                right = true;
+               // System.out.println("D Pressed");
+                break;
+>>>>>>> ian-working
         }
     }
     
