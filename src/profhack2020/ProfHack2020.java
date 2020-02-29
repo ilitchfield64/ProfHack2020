@@ -205,11 +205,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     public void playerMovement(){ // This method will handle movement speed
         ;
         if(left){ // This moves player left
-            System.out.println("Left");
+           // System.out.println("Left");
             playerRect.x = playerRect.x - moveSpeed;
         }
         if(right){ // This moves player right
-            System.out.println("Right");
+          //  System.out.println("Right");
             playerRect.x = playerRect.x + moveSpeed;
         
         }
@@ -273,11 +273,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                     break;
                 case KeyEvent.VK_A:
                     left = false;
-                    System.out.println("A Released");
+                   // System.out.println("A Released");
                     break;
                 case KeyEvent.VK_D:
                     right = false;
-                    System.out.println("D released");
+                  //  System.out.println("D released");
                     break;
         }
     }
@@ -294,11 +294,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                 break;
             case KeyEvent.VK_A:
                 left = true;
-                System.out.println("A Pressed");
+              //  System.out.println("A Pressed");
                 break;
             case KeyEvent.VK_D:
                 right = true;
-                System.out.println("D Pressed");
+               // System.out.println("D Pressed");
                 break;
         }
     }
