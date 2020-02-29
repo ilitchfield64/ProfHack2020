@@ -200,6 +200,22 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         System.out.println(b);
         //this makes printing easier
     }
+<<<<<<< Updated upstream
+=======
+    
+    public void playerMovement(){ // This method will handle movement speed
+        ;
+        if(left){ // This moves player left
+           // System.out.println("Left");
+            playerRect.x = playerRect.x - moveSpeed;
+        }
+        if(right){ // This moves player right
+           // System.out.println("Right");
+            playerRect.x = playerRect.x + moveSpeed;
+        
+        }
+    }
+>>>>>>> Stashed changes
 
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
@@ -246,6 +262,48 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
         if (ke.getKeyCode() == KeyEvent.VK_D) {
             playerX = 0;
+<<<<<<< Updated upstream
+=======
+        }*/
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_S:
+                    special = false;
+                    break;
+                case KeyEvent.VK_W:
+                    shoot = false;
+                    break;
+                case KeyEvent.VK_A:
+                    left = false;
+                    //System.out.println("A Released");
+                    break;
+                case KeyEvent.VK_D:
+                    right = false;
+                    //System.out.println("D released");
+                    break;
+        }
+    }
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_S:
+                special = true;
+                break;
+            case KeyEvent.VK_W:
+                shoot = true;
+                bullets1.add(bulletBase);
+                bullets2.add(bulletBase);
+                break;
+            case KeyEvent.VK_A:
+                left = true;
+                //System.out.println("A Pressed");
+                break;
+            case KeyEvent.VK_D:
+                right = true;
+                //System.out.println("D Pressed");
+                break;
+>>>>>>> Stashed changes
         }
     }
     
