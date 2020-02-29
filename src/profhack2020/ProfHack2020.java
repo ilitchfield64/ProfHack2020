@@ -32,8 +32,8 @@ import java.util.ArrayList;
  */
 public class ProfHack2020 extends JPanel implements KeyListener {
     
-    final int SCREEN_WIDTH = 900;
-    final int SCREEN_HEIGHT = 1000;
+    final int SCREEN_WIDTH = 600;
+    final int SCREEN_HEIGHT = 800;
     
     Rectangle playerRect;
     Rectangle[] stars;
@@ -71,19 +71,20 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
         
-        musicObject.playMusic(filepath);
-        playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, 162, 240);
-        enemyRect = new Rectangle(0, 0, 50, 50);
+        musicObject.playMusic(filepath); // Plays the background music
+        playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH/8), (SCREEN_WIDTH/8)); // Initial start of the player
+        enemyRect = new Rectangle(0, 0, 50, 50); 
         bulletBase = new Rectangle(playerRect.x + (playerRect.width/2), playerRect.y, 5, 25);
         bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
         bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
         stars = new Rectangle[100];
-        for (int i = 0; i < stars.length; i++) {
+        
+        for (int i = 0; i < stars.length; i++) { // Generates the random Stars on the background
             int x = Gen.nextInt(SCREEN_WIDTH);
             int y = Gen.nextInt(SCREEN_HEIGHT);
             stars[i] = new Rectangle(x, y, 5, 5);
         }
-        try {
+        try { // 
             ship = ImageIO.read(new File("src/profhack2020/ship.png"));
             
 
