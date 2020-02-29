@@ -84,7 +84,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try {
-            ship = ImageIO.read(new File("src/arcade/ship.png"));
+            ship = ImageIO.read(new File("src/profhack2020/ship.png"));
             
 
         } catch (IOException e) {
@@ -203,7 +203,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
-        frame.setTitle("Arcade");
+        frame.setTitle("ProfHacks2020: Space Shooter");
         frame.add(game);
         frame.pack();
         frame.setResizable(true);
