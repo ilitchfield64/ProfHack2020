@@ -42,6 +42,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle bullet1;
     Rectangle bullet2;
     
+    int timer = 0; // timer for flashing rectangle
+    
     ArrayList<Rectangle> bullets1 = new ArrayList<Rectangle>(0); 
     ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
     
@@ -112,6 +114,18 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void update() {
+        
+        if(timer < 5){
+            timer++;
+        }
+        else if(timer >= 5 && timer <= 10){
+            timer++;
+        }
+        if(timer >= 10) {
+            timer = 0;
+        }
+        print(timer);
+        
         playerMovement(); // Handles movement
         bulletY = bulletSpeed * -1;
         Boarders(playerRect);
@@ -187,6 +201,16 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         for (int i = 0; i < stars.length; i++) { // This randomizes stars on the background
             g.fillRect(stars[i].x, stars[i].y, stars[i].width, stars[i].height);
         }
+        // Draws flashing rectangle
+         if (timer <= 5) {
+            g.setColor(Color.red);
+            g.fillRect(200, 150, 200, 150); // Rectangle
+            if (timer >= 10 && timer <= 15) {
+                g.setColor(Color.red);
+                g.fillRect(200, 150, 200, 150); // Rectangle
+            }
+        }
+         
         // Draws the Bullets
         g.setColor(Color.RED); 
         for(int i = 0; i < bullets1.size(); i ++){
