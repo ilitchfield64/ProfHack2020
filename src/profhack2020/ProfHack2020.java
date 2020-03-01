@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import profhack2020.music;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -287,7 +288,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
 
             if (enemyBulletRect1.intersects(playerRect)) {
-                System.out.println("Game Over");
+                gameOver();
             }
         }
 
@@ -305,7 +306,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
 
             if (enemyBulletRect2.intersects(playerRect)) {
-                System.out.println("Game Over");
+                gameOver();
             }
         }
 
@@ -323,7 +324,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
 
             if (enemyBulletRect1.intersects(playerRect)) {
-                System.out.println("Game Over");
+                gameOver();
             }
             
         }
@@ -335,8 +336,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 // When ANYTHING intersects the player
 
     public void gameOver() {
-        System.out.println("Game Over");
-        System.out.println("Your Score was " + Score);
+        JOptionPane.showConfirmDialog(null, "GAME OVER! Your Score was: " + Score);
         System.exit(0);
     }
 
@@ -376,7 +376,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     // Enemy randomly will enter the screen
     public void enemyEntersScreen1(Rectangle enemyRect) {
 
-        System.out.println(spawnEnemy1);
+        //System.out.println(spawnEnemy1);
         if (spawnEnemy1) {
             if (enemyRect.y <= 75) {
                 enemyRect.y++;
@@ -392,7 +392,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     public void enemyEntersScreen2(Rectangle enemyRect) {
 
-        System.out.println(spawnEnemy2);
+        //System.out.println(spawnEnemy2);
         if (spawnEnemy2) {
             if (enemyRect.y <= 75) {
                 enemyRect.y++;
@@ -408,7 +408,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     public void enemyEntersScreen3(Rectangle enemyRect) {
 
-        System.out.println(spawnEnemy3);
+        //System.out.println(spawnEnemy3);
         if (spawnEnemy3) {
             if (enemyRect.y <= 50) {
                 enemyRect.y++;
@@ -422,14 +422,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
     }
 
-    public void enemyShooting() {
-
-    }
-
     // Moves enemy off the screen when deaded and set spawn false
-    public void enemyKilled(Rectangle enemyRect) {
+    public void enemyKilled(Rectangle enemyRect, Rectangle bullet) {
         enemyRect.x = defaultEnemy.x;
         enemyRect.y = defaultEnemy.y;
+        //bullet.y = defaultEnemy.y;
         score++;
 
     }
@@ -437,16 +434,19 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     // Checks if the ememy is hit by bullet
     public void enemyHit() {
         if (enemyRect1.intersects(bullet1) || enemyRect1.intersects(bullet2)) {
-            enemyKilled(enemyRect1);
+            enemyKilled(enemyRect1, enemyBullet1);
             spawnEnemy1 = false;
+            Score += 1;
         }
         if (enemyRect2.intersects(bullet1) || enemyRect2.intersects(bullet2)) {
-            enemyKilled(enemyRect2);
+            enemyKilled(enemyRect2, enemyBullet2);
             spawnEnemy2 = false;
+            Score += 1;
         }
         if (enemyRect3.intersects(bullet1) || enemyRect3.intersects(bullet2)) {
-            enemyKilled(enemyRect3);
+            enemyKilled(enemyRect3, enemyBullet3);
             spawnEnemy3 = false;
+            Score += 1;
         }
     }
 
@@ -545,22 +545,22 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
 
         if (timer <= 35) {
-            g.drawImage(fire6, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire6, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
         if (timer >= 36 && timer <= 70) {
-            g.drawImage(fire5, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire5, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
         if (timer >= 71 && timer <= 105) {
-            g.drawImage(fire4, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire4, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
         if (timer >= 106 && timer <= 140) {
-            g.drawImage(fire3, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire3, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
         if (timer >= 141 && timer <= 175) {
-            g.drawImage(fire2, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire2, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
         if (timer >= 176 && timer <= 210) {
-            g.drawImage(fire1, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire1, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
 
         // Draws the ship tilting depending on which way the player is moving
