@@ -73,6 +73,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     
     public Random Gen = new Random();
     
+    
 // Clock
     Clock updateClock = Clock.systemDefaultZone();
     Clock temp = Clock.offset(updateClock, Duration.ofMillis(1));
@@ -236,7 +237,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     }
     public void enemyEnterScreen(){
-        
+        if(!enemyOnField){
+            Gen.nextInt();
+        }
     }
     public void enemyLeaveScreen(){
         
