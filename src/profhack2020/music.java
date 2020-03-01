@@ -29,7 +29,7 @@ public class music {
                 
                 //JOptionPane.showConfirmDialog(null, "Hit ok to pause");
                 //long clipTimePostion = clip.getMicrosecondPosition();
-                //clip.stop();
+                clip.stop();
                 
                 //JOptionPane.showMessageDialog(null, "Hit ok to resume");
                 //clip.setMicrosecondPosition(clipTimePostion);
