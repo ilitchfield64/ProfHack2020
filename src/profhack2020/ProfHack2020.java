@@ -5,11 +5,14 @@
  */
 package profhack2020;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -25,7 +28,10 @@ import javax.swing.JPanel;
 
 import profhack2020.music;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JWindow;
 
 /**
  *
@@ -336,7 +342,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 // When ANYTHING intersects the player
 
     public void gameOver() {
-        JOptionPane.showConfirmDialog(null, "GAME OVER! Your Score was: " + Score);
+        JOptionPane.showMessageDialog(null, "GAME OVER! Your Score was: " + Score);
         System.exit(0);
     }
 
@@ -615,6 +621,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
 
     public static void main(String[] args) {
+        SplashWindow1("/src/profhack2020", Frame f)
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
         frame.setTitle("ProfHacks2020: Space Shooter");
@@ -690,4 +697,22 @@ public class ProfHack2020 extends JPanel implements KeyListener {
          */
     }
 
+}
+class SplashWindow1 extends JWindow
+{
+    public SplashWindow1(String filename, Frame f)
+    {
+        super(f);
+        JLabel l = new JLabel(new ImageIcon(filename));
+        getContentPane().add(l, BorderLayout.CENTER);
+        pack();
+        Dimension screenSize =
+          Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension labelSize = l.getPreferredSize();
+        setLocation(screenSize.width/2 - (labelSize.width/2),
+                    screenSize.height/2 - (labelSize.height/2));
+        setVisible(true);
+        screenSize = null;
+        labelSize = null;
+    }
 }
