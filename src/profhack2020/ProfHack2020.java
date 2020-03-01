@@ -263,7 +263,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             enemyEntersScreen3(enemyRect3);
         }   
         enemyHit();
-        playerHit();
+        //playerHit();
         
         
         
@@ -302,6 +302,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
         }
         return 0;
+    }
+    public void leaveScreem(Rectangle enemyRect){
+        if (enemyRect.y > -75){
+            enemyRect.y--;
+        }
     }
     // Enemy randomly will enter the screen
     public void enemyEntersScreen1(Rectangle enemyRect) {
