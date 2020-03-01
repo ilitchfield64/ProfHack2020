@@ -256,9 +256,10 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                 if (enemyHit){
                     enemyKilled();
                 }
+            }else if (enemyHit){
+                enemyKilled();
             }
         }
-       
     }
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
