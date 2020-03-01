@@ -70,6 +70,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     int starSpeed = 3; // Starfield Movement speed
     
     int timer = 0;
+    int timerF = 0;
     int tilt = 0;
     
 // Player Variables
@@ -86,6 +87,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     
     public Random Gen = new Random();
     
+    
+    boolean startGame = false;
     
 // Clock
     Clock updateClock = Clock.systemDefaultZone();
@@ -136,8 +139,17 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void update() {
-        timer ++;
-        System.out.println(timer);
+        System.out.println(startGame);
+        timerF ++;
+         if(timerF < 5){
+            timerF++;
+        }
+        else if(timerF >= 5 && timerF <= 10){
+            timerF++;
+        }
+        if(timerF >= 10) {
+            timerF = 0;
+        }
         playerMovement(); // Handles movement
         bulletY = bulletSpeed * -1;
         Boarders(playerRect);
@@ -230,7 +242,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
 
         
-        
+        // Draws flashing rectangle
+         if (timerF <= 5) {
+            g.setColor(Color.red);
+            g.fillRect(200, 150, 200, 150); // Rectangle
+            if (timerF >= 10 && timerF <= 15) {
+                g.setColor(Color.red);
+                g.fillRect(200, 150, 200, 150); // Rectangle
+            }
+        }
         
         //fire
         
@@ -433,6 +453,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     if(ke.getKeyCode() == KeyEvent.VK_SPACE){
         enemyEnterScreen(enemyRect1);
     }
+    
+    startGame = true;
     
     }
     
