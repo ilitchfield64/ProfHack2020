@@ -61,7 +61,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle enemyBullet1;
     Rectangle enemyBullet2;
     Rectangle enemyBullet3;
-
+    
     Rectangle enemyAstroid1;
     Rectangle enemyAstroid2;
     Rectangle enemyAstroid3;
@@ -70,6 +70,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle enemyBulletRect2;
     Rectangle enemyBulletRect3;
 
+    Image title;
     Image astroid;
     Image enemy;
     Image rocket;
@@ -154,6 +155,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try { // Images
+            title = ImageIO.read(new File("src/profhack2020/title.gif"));
+
             astroid = ImageIO.read(new File("src/profhack2020/astroid.png"));
             enemy = ImageIO.read(new File("src/profhack2020/enemyTile.png"));
             rocket = ImageIO.read(new File("src/profhack2020/Rocket.png"));
@@ -336,11 +339,23 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
 
         enemyHit();
+        if (spawnEnemy1 == false){
+            enemyBulletRect1.x = -100;
+        }
+                
+        if (spawnEnemy2 == false){
+            enemyBulletRect2.x = -100;
+        }        
+        if (spawnEnemy3 == false){
+            enemyBulletRect2.x = -100;
+        }
         playerHit();
 
     } /////// THE END OF UPDATE
 // When ANYTHING intersects the player
-
+    public void title(){
+        
+    }
     public void gameOver() {
         JOptionPane.showMessageDialog(null, "GAME OVER! Your Score was: " + Score);
         System.exit(0);
