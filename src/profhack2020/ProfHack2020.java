@@ -66,7 +66,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean enemyHit = false; // Checks if the enemy was hit 
     boolean enemyOnField = false; // Checks if an enemy is present on the screen
     boolean shoot, special, left, right; // Input handling, used to smooth movement
-
+    boolean startGame = false; // When false, Title Screen is displayed
+     
     int starSpeed = 3; // Starfield Movement speed
     
     int timer = 0;
@@ -88,7 +89,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     public Random Gen = new Random();
     
     
-    boolean startGame = false;
+    
     
 // Clock
     Clock updateClock = Clock.systemDefaultZone();
@@ -136,9 +137,14 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         
         
     }
+    public void titleScreen(){
+        if(!startGame){
+            
+        }
+    }
     
     public void update() {
-        System.out.println(startGame);
+        
         timerF ++;
          if(timerF < 5){
             timerF++;
@@ -221,7 +227,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         // Draws the Background
         g.setColor(Color.BLACK); // Set Background color
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Fills Background with black
-        while(startGame){
+      
             
         
         g.setColor(Color.WHITE);
@@ -312,7 +318,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
         
         
-        }
+       
         if (updateClock.instant().compareTo(update) >= 0) { //updates clock cycle
             resetUpdateClock();
             update();
@@ -457,7 +463,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         enemyEnterScreen(enemyRect1);
     }
     
-    startGame = true;
     
     }
     
