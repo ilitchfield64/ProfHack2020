@@ -151,17 +151,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         if (timer >= 210) {
             timer = 0;
         }
-    }
-
-    public void titleScreen() {
-        if (!startGame) {
-
-        }
-    }
-
-    public void update(){
-
-        timerF++;
+    
         if (timerF < 5) {
             timerF++;
 
@@ -238,6 +228,25 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             int y = Gen.nextInt(700) * -1;
             starMove(stars[i], x, y);
         }
+        
+        //if(spawnEnemy){
+            
+        //}
+        enemyRect1.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+        int distance = Gen.nextInt(100) + 50;
+
+        for (int i = 0; i <= distance; i++) {
+            enemyRect1.y = enemyRect1.y + 1;
+        }
+        
+        enemyHit();
+        
+        
+        
+        
+        
+        
+        
 
     }
 
@@ -302,10 +311,10 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         // Draws flashing rectangle
         if (timerF <= 5) {
             g.setColor(Color.red);
-            g.fillRect(200, 150, 200, 150); // Rectangle
+            //g.fillRect(200, 150, 200, 150); // Rectangle
             if (timerF >= 10 && timerF <= 15) {
                 g.setColor(Color.red);
-                g.fillRect(200, 150, 200, 150); // Rectangle
+                //g.fillRect(200, 150, 200, 150); // Rectangle
             }
         }
 
@@ -399,12 +408,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
 
     public void enemyEnterScreen(Rectangle enemyRect) {
-        enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
-        int distance = Gen.nextInt(100) + 50;
-
-        for (int i = 0; i <= distance; i++) {
-            enemyRect.y = enemyRect.y + 1;
-        }
+        
 
     }
 
