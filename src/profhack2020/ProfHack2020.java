@@ -532,6 +532,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         // Drawing the astroid
         g.drawImage(astroid, enemyAstroid1.x, enemyAstroid1.y, enemyAstroid1.width, enemyAstroid1.height, null);
         g.drawImage(astroid, enemyAstroid2.x, enemyAstroid2.y, enemyAstroid2.width, enemyAstroid2.height, null);
+        g.drawImage(astroid, enemyAstroid3.x, enemyAstroid3.y, enemyAstroid3.width, enemyAstroid3.height, null);
 
         // Enemy Draw Routines
         g.drawImage(enemy, enemyRect1.x, enemyRect1.y, enemyRect1.width, enemyRect1.height, null); // Draws enemy 1s box
