@@ -54,7 +54,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     Rectangle enemyAstroid1;
     Rectangle enemyAstroid2;
-
+   
+    Image astroid;
+    Image enemy;
     Image rocket;
     Image rocketLeft;
     Image rocketRight;
@@ -69,10 +71,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean enemyHit = false; // Checks if the enemy was hit 
     boolean enemyOnField = false; // Checks if an enemy is present on the screen
     boolean shoot, special, left, right; // Input handling, used to smooth movement
-
+    boolean spawnEnemy1 = false;
+    boolean spawnEnemy2 = false;
+    boolean spawnEnemy3 = false;
     boolean astroid1 = false;
     boolean astroid2 = false;
-
     boolean startGame = false; // When false, Title Screen is displayed
 
     int starSpeed = 3; // Starfield Movement speed
@@ -109,11 +112,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         musicObject.playMusic(filepath); // Plays the background music
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH / 8), (SCREEN_WIDTH / 8)); // Initial start of the player
         defaultEnemy = new Rectangle(-100, 0, 0, 0);
-        // These will exist off screen 
-        enemyRect1 = new Rectangle(SCREEN_WIDTH / 16, 50, 50, 50);
-        enemyRect2 = new Rectangle((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 32), 50, 50, 50);
-        enemyRect3 = new Rectangle(SCREEN_WIDTH - (SCREEN_WIDTH / 8), 50, 50, 50);
-
+        
+        enemyRect1 = new Rectangle(SCREEN_WIDTH / 16, -50, 50, 50);
+        enemyRect2 = new Rectangle((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 32), -50, 50, 50);
+        enemyRect3 = new Rectangle(SCREEN_WIDTH - (SCREEN_WIDTH / 8), -50, 50, 50);
+        
         enemyAstroid1 = new Rectangle(-100, 0, 50, 50);
         enemyAstroid2 = new Rectangle(-100, 0, 50, 50);
 
@@ -127,7 +130,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             int y = Gen.nextInt(SCREEN_HEIGHT);
             stars[i] = new Rectangle(x, y, 5, 5);
         }
-        try { // 
+        try { // Images
+            astroid = ImageIO.read(new File("src/profhack2020/astroid.png"));
+            enemy = ImageIO.read(new File("src/profhack2020/enemyTile.png"));
             rocket = ImageIO.read(new File("src/profhack2020/Rocket.png"));
             rocketRight = ImageIO.read(new File("src/profhack2020/RocketRight.png"));
             rocketLeft = ImageIO.read(new File("src/profhack2020/RocketLeft.png"));
@@ -164,7 +169,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         if (timerF >= 10) {
             timerF = 0;
         }
-
+        // Astroids coming on screen
         if (astroid2) {
             if (enemyAstroid2.y >= SCREEN_HEIGHT + 50) {
                 enemyAstroid2.y = -100;
@@ -204,7 +209,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
             }
         }
-
+        // Bullet shooting timer and movement
         if (!bullets1.isEmpty()) {
             for (int i = 0; i < bullets1.size(); i++) {
                 if (bullets1.get(i).y <= 0) {
@@ -222,23 +227,34 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
             bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
         }
-
+        // Stars randoming
         for (int i = 0; i < stars.length; i++) {
             int x = Gen.nextInt(SCREEN_WIDTH);
             int y = Gen.nextInt(700) * -1;
             starMove(stars[i], x, y);
         }
         
-        //if(spawnEnemy){
+        //if(spawnEnemy1){
             
         //}
-        enemyRect1.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
-        int distance = Gen.nextInt(100) + 50;
-
+        
+/*
         for (int i = 0; i <= distance; i++) {
             enemyRect1.y = enemyRect1.y + 1;
         }
-        
+        */
+
+
+        // This code handles the random generation of the Enemies
+        if((spawnEnemy() == 1) || spawnEnemy1){
+            enemyEntersScreen1(enemyRect1);
+        }
+        if(spawnEnemy() ==2 || spawnEnemy2){
+            enemyEntersScreen2(enemyRect2);
+        }
+        if(spawnEnemy() == 3 || spawnEnemy3){
+            enemyEntersScreen3(enemyRect3);
+        }   
         enemyHit();
         
         
@@ -247,15 +263,106 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         
         
         
+        
+    } /////// THE END OF UPDATE
+
+    // This removes the enemy from the screen 
+    public int spawnEnemy(){
+        if((SCREEN_HEIGHT/4) == Gen.nextInt(SCREEN_HEIGHT / 2)){
+            if(Gen.nextInt(4) == 1){
+                return(1);
+            }if(Gen.nextInt(4) == 2){
+                return(2);
+            }if(Gen.nextInt(4) == 3){
+                return(3);
+            }
+        }
+        return 0;
+    }
+    // Going to do the math in update to draw an enemy sliding down
+    public void enemyEntersScreen1(Rectangle enemyRect) {
+
+        System.out.println(spawnEnemy1);
+        if(spawnEnemy1){
+            if (enemyRect.y <= 50){
+                enemyRect.y++;
+                System.out.println("enemy 1 Moved");  
+            }else{
+                System.out.println("Finished Moving 1");
+            }
+
+        }else{
+            enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+            int distance = Gen.nextInt(100) + 50;
+            spawnEnemy1 = true;
+        }
+    }
+    public void enemyEntersScreen2(Rectangle enemyRect) {
+
+        System.out.println(spawnEnemy2);
+        if(spawnEnemy2){
+            if (enemyRect.y <= 50){
+                enemyRect.y++;
+                System.out.println("enemy 2 Moved");  
+            }else{
+                System.out.println("Finished Moving 2");
+            }
+
+        }else{
+            enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+            int distance = Gen.nextInt(100) + 50;
+            spawnEnemy2 = true;
+        }
+    }public void enemyEntersScreen3(Rectangle enemyRect) {
+
+        System.out.println(spawnEnemy3);
+        if(spawnEnemy3){
+            if (enemyRect.y <= 50){
+                enemyRect.y++;
+                System.out.println("enemy 3 Moved");  
+            }else{
+                System.out.println("Finished Moving 3");
+            }
+
+        }else{
+            enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+            int distance = Gen.nextInt(100) + 50;
+            spawnEnemy3 = true;
+        }
+    }
+    
+    public void enemyLeaveScreen() {
 
     }
 
-    // This removes the enemy from the screen 
+    public void enemyShooting() {
+
+    }
+    // Moves enemy off the screen when deaded
+    public void enemyKilled(Rectangle enemyRect) {
+        enemyRect.x = defaultEnemy.x;
+        enemyRect.y = defaultEnemy.y;
+
+    }
+    // Checks if the ememy is hit by bullet
+    public void enemyHit() {
+        if (enemyRect1.intersects(bullet1) || enemyRect1.intersects(bullet2)) {
+            enemyKilled(enemyRect1);
+        }
+        if (enemyRect2.intersects(bullet1) || enemyRect2.intersects(bullet2)) {
+            enemyKilled(enemyRect2);
+        }
+        if (enemyRect3.intersects(bullet1) || enemyRect3.intersects(bullet2)) {
+            enemyKilled(enemyRect3);
+        }
+    }
+
     public void deleteEnemy(Rectangle b) {
         // Add lines for a death animation
 
-        b.x = Gen.nextInt(SCREEN_WIDTH);
+        b.x = Gen.nextInt(SCREEN_WIDTH-100);
         b.y = -50;
+        
     }
 
     // This allows the starfield to move
@@ -278,7 +385,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             b.x -= moveSpeed;
         }
     }
-
+    // Graphics
     public void paint(Graphics g) { // Graphics Routine  **Why not make submethods that handle layers??**
         super.paint(g);
         // Draws the Background
@@ -295,15 +402,14 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             g.fillRect(bullets1.get(i).x, bullets1.get(i).y, bullets1.get(i).width, bullets1.get(i).height);
             g.fillRect(bullets2.get(i).x, bullets2.get(i).y, bullets2.get(i).width, bullets2.get(i).height);
         }
-        g.setColor(Color.BLUE);
-        g.fillRect(enemyAstroid1.x, enemyAstroid1.y, enemyAstroid1.width, enemyAstroid1.height);
-        g.fillRect(enemyAstroid2.x, enemyAstroid2.y, enemyAstroid2.width, enemyAstroid2.height);
+        // Drawing the astroid
+        g.drawImage(astroid, enemyAstroid1.x, enemyAstroid1.y, enemyAstroid1.width, enemyAstroid1.height, null);
+        g.drawImage(astroid, enemyAstroid2.x, enemyAstroid2.y, enemyAstroid2.width, enemyAstroid2.height, null);
 
         // Enemy Draw Routines
-        g.setColor(Color.LIGHT_GRAY); // sets enemy color
-        g.fillRect(enemyRect1.x, enemyRect1.y, enemyRect1.width, enemyRect1.height); // Draws enemy 1s box
-        g.fillRect(enemyRect2.x, enemyRect2.y, enemyRect2.width, enemyRect2.height); // Draws enemy 2s box
-        g.fillRect(enemyRect3.x, enemyRect3.y, enemyRect3.width, enemyRect3.height); // Draws enemy 3s box
+        g.drawImage(enemy, enemyRect1.x, enemyRect1.y, enemyRect1.width, enemyRect1.height,null); // Draws enemy 1s box
+        g.drawImage(enemy, enemyRect2.x, enemyRect2.y, enemyRect2.width, enemyRect2.height,null); // Draws enemy 2s box
+        g.drawImage(enemy, enemyRect3.x, enemyRect3.y, enemyRect3.width, enemyRect3.height, null); // Draws enemy 3s box
 
         // Draws the Player on the screen
         g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
@@ -318,7 +424,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
         }
 
-        //fire
+        // Fire Animation
         if (timer <= 35) {
             g.drawImage(fire1, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
@@ -357,7 +463,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             g.drawImage(fire1, playerRect.x + 40, playerRect.y + 73, 10, 15, null);
         }
 
-        // draws the ship tilting depending on which way the player is moving
+        // Draws the ship tilting depending on which way the player is moving
         if (tilt == 0) {
             g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
         }
@@ -376,7 +482,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         repaint(); // Repaints the screen
 
     }
-
+    // Resets the clock
     public void resetUpdateClock() {
         temp = Clock.offset(updateClock, Duration.ofMillis(4));
         update = temp.instant();
@@ -406,52 +512,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         playerRect.x += playerX;
 
     }
-
-    public void enemyEnterScreen(Rectangle enemyRect) {
-        
-
-    }
-
-    public void enemyLeaveScreen() {
-
-    }
-
-    public void enemyShooting() {
-
-    }
-
-    public void enemyKilled(Rectangle enemyRect) {
-        enemyRect.x = defaultEnemy.x;
-        enemyRect.y = defaultEnemy.y;
-
-    }
-
-    public void enemyHit() {
-        if (enemyRect1.intersects(bullet1) || enemyRect1.intersects(bullet2)) {
-            enemyKilled(enemyRect1);
-        }
-        if (enemyRect2.intersects(bullet1) || enemyRect2.intersects(bullet2)) {
-            enemyKilled(enemyRect2);
-        }
-        if (enemyRect3.intersects(bullet1) || enemyRect3.intersects(bullet2)) {
-            enemyKilled(enemyRect3);
-        }
-    }
-
-    public void enemy() { // This will handle all the enemy structure
-        if (!enemyOnField) {
-            //enemyEnterScreen();
-        } else {
-            if (!enemyHit) {
-                //enemyShooting();
-                if (enemyHit) {
-                    //enemyKilled();
-                }
-            } else if (enemyHit) {
-                //enemyKilled();
-            }
-        }
-    }
+    
 
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
@@ -517,16 +578,16 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             case KeyEvent.VK_ESCAPE: // Emergency Esc from program
                 System.exit(0);
         }
-
+/*
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            enemyEnterScreen(enemyRect1);
+            enemyEntersScreen(enemyRect1,spawnEnemy1);
         }
 
         //startGame = true;
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            enemyEnterScreen(enemyRect1);
+            enemyEntersScreen(enemyRect1, spawnEnemy1);
         }
-
+*/
     }
 
 }
