@@ -59,7 +59,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle enemyAstroid2;
     Rectangle enemyAstroid3;
 
-    Rectangle enemyBulletRect;
+    Rectangle enemyBulletRect1;
+    Rectangle enemyBulletRect2;
+    Rectangle enemyBulletRect3;
 
     Image astroid;
     Image enemy;
@@ -124,7 +126,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         enemyRect2 = new Rectangle((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 32), -50, 50, 50);
         enemyRect3 = new Rectangle(SCREEN_WIDTH - (SCREEN_WIDTH / 8), -50, 50, 50);
 
-        enemyBulletRect = new Rectangle(0, 0, 5, 25);
+        enemyBulletRect1 = new Rectangle(-100, 0, 5, 25);
+        enemyBulletRect2 = new Rectangle(-100, 0, 5, 25);
+        enemyBulletRect3 = new Rectangle(-100, 0, 5, 25);
 
         // Static debris
         enemyAstroid1 = new Rectangle(-100, 0, 50, 50);
@@ -273,15 +277,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             enemyEntersScreen1(enemyRect1);
             int temp = Gen.nextInt(2);
             if (temp == 0) {
-
-                if (enemyBulletRect.y < SCREEN_HEIGHT) {
-                    enemyBulletRect.y += bulletSpeed;
+                enemyBulletRect1.x = enemyRect1.x;
+                if (enemyBulletRect1.y < SCREEN_HEIGHT) {
+                    enemyBulletRect1.y += bulletSpeed;
                 } else {
-                    enemyBulletRect.y = enemyRect1.y;
+                    enemyBulletRect1.y = enemyRect1.y;
                 }
             }
 
-            if (enemyBulletRect.intersects(playerRect)) {
+            if (enemyBulletRect1.intersects(playerRect)) {
                 System.out.println("Game Over");
             }
         }
@@ -289,18 +293,46 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         if (spawnEnemy()
                 == 2 || spawnEnemy2) {
             enemyEntersScreen2(enemyRect2);
+                        int temp = Gen.nextInt(2);
+            if (temp == 0) {
+                enemyBulletRect2.x = enemyRect2.x;
+                if (enemyBulletRect2.y < SCREEN_HEIGHT) {
+                    enemyBulletRect2.y += bulletSpeed;
+                } else {
+                    enemyBulletRect2.y = enemyRect2.y;
+                }
+            }
+
+            if (enemyBulletRect2.intersects(playerRect)) {
+                System.out.println("Game Over");
+            }
         }
 
         if (spawnEnemy()
                 == 3 || spawnEnemy3) {
             enemyEntersScreen3(enemyRect3);
+                        int temp = Gen.nextInt(2);
+            if (temp == 0) {
+                enemyBulletRect2.x = enemyRect2.x;
+                if (enemyBulletRect2.y < SCREEN_HEIGHT) {
+                    enemyBulletRect2.y += bulletSpeed;
+                } else {
+                    enemyBulletRect2.y = enemyRect2.y;
+                }
+            }
+
+            if (enemyBulletRect1.intersects(playerRect)) {
+                System.out.println("Game Over");
+            }
+            
         }
 
         enemyHit();
         //playerHit();
 
     } /////// THE END OF UPDATE
-// When ANYTHING intersects the player
+
+// When ANYTHING intersects the player it crashes
 
     public void playerHit() {
         if (enemyAstroid1.intersects(playerRect)) {
@@ -333,7 +365,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         return 0;
     }
 
-    public void leaveScreem(Rectangle enemyRect) {
+    public void leaveScreen(Rectangle enemyRect) {
         if (enemyRect.y > -75) {
             enemyRect.y--;
         }
@@ -351,7 +383,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
         } else {
             enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 100)) + 25;
-            int distance = Gen.nextInt(100) + 50;
+           // int distance = Gen.nextInt(100) + 50;
             spawnEnemy1 = true;
         }
     }
@@ -386,10 +418,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             int distance = Gen.nextInt(100) + 50;
             spawnEnemy3 = true;
         }
-    }
-
-    public void enemyLeaveScreen() {
-
     }
 
     public void enemyShooting() {
@@ -467,7 +495,11 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             g.fillRect(bullets1.get(i).x, bullets1.get(i).y, bullets1.get(i).width, bullets1.get(i).height);
             g.fillRect(bullets2.get(i).x, bullets2.get(i).y, bullets2.get(i).width, bullets2.get(i).height);
         }
-        g.fillRect(enemyBulletRect.x, enemyBulletRect.y, enemyBulletRect.width, enemyBulletRect.height);
+        //Drawing Enemy Bullets
+        g.fillRect(enemyBulletRect1.x+ 22, enemyBulletRect1.y, enemyBulletRect1.width, enemyBulletRect1.height);
+        g.fillRect(enemyBulletRect2.x+ 22, enemyBulletRect2.y, enemyBulletRect2.width, enemyBulletRect2.height);
+        g.fillRect(enemyBulletRect3.x+ 22, enemyBulletRect3.y, enemyBulletRect3.width, enemyBulletRect3.height);
+
         // Drawing the astroid
         g.drawImage(astroid, enemyAstroid1.x, enemyAstroid1.y, enemyAstroid1.width, enemyAstroid1.height, null);
         g.drawImage(astroid, enemyAstroid2.x, enemyAstroid2.y, enemyAstroid2.width, enemyAstroid2.height, null);
