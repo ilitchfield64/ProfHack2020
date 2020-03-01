@@ -202,15 +202,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         if (astroid3) {
             if (enemyAstroid3.y >= SCREEN_HEIGHT + 50) {
                 enemyAstroid3.y = -100;
-                enemyAstroid3.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+                enemyAstroid3.x = Gen.nextInt((SCREEN_WIDTH - 50));
                 astroid3 = false;
             }
-            enemyAstroid2.y += astroidSpeed;
+            enemyAstroid3.y += astroidSpeed;
         }
         if (astroid2) {
             if (enemyAstroid2.y >= SCREEN_HEIGHT + 50) {
                 enemyAstroid2.y = -100;
-                enemyAstroid2.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+                enemyAstroid2.x = Gen.nextInt((SCREEN_WIDTH - 50));
                 astroid2 = false;
             }
             enemyAstroid2.y += astroidSpeed;
@@ -218,20 +218,20 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         if (astroid1) {
             if (enemyAstroid1.y >= SCREEN_HEIGHT + 50) {
                 enemyAstroid1.y = -100;
-                enemyAstroid1.x = Gen.nextInt((SCREEN_WIDTH - 50)) + 50;
+                enemyAstroid1.x = Gen.nextInt((SCREEN_WIDTH - 50));
                 astroid1 = false;
             }
             enemyAstroid1.y += astroidSpeed;
         }
 
-        if (timerA >= 500 && timerA
-                <= 550) {
+        if (timerA >= 500 && timerA <= 550) {
             astroid1 = true;
         }
-        if (timerA
-                == 500 + Gen.nextInt(
-                        300)) {
+        if (timerA == 500 + Gen.nextInt(400)) {
             astroid2 = true;
+        }
+        if (timerA == 500 + Gen.nextInt(200)) {
+            astroid3 = true;
         }
         if (timerA
                 >= 1000) {
