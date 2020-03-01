@@ -17,6 +17,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -123,10 +125,14 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Clock temp = Clock.offset(updateClock, Duration.ofMillis(1));
     Instant update = temp.instant();
 
-    public ProfHack2020() {
+    public ProfHack2020() throws MalformedURLException {
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setFocusable(true);
         addKeyListener(this);
+        final ImageIcon icon = new ImageIcon(new URL("https://i.imgur.com/NVrXZR9.gif"));
+        JOptionPane.showMessageDialog(null, "", "About", JOptionPane.INFORMATION_MESSAGE, icon);
+        
+        
         musicObject.playMusic(filepath); // Plays the background music
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH / 8), (SCREEN_WIDTH / 8)); // Initial start of the player
         // Enemies and attacks
@@ -616,10 +622,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         //this makes printing easier
     }
 
-    public void astroidAttack(Rectangle b) {
-
-    }
-
     public void playerMovement() { // This method will handle movement speed
 
         if (left) { // This moves player left
@@ -635,7 +637,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException {
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
         frame.setTitle("ProfHacks2020: Space Shooter");
