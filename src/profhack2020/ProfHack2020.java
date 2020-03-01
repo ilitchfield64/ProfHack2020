@@ -41,39 +41,45 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle bulletBase;
     Rectangle bullet1;
     Rectangle bullet2;
-    
-    ArrayList<Rectangle> bullets1 = new ArrayList<Rectangle>(0); 
-    ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
-    
     // Foreground
     Rectangle playerRect; // Player hit box
     Rectangle enemyRect1; // Enemy Hitboxes
     Rectangle enemyRect2; // *
     Rectangle enemyRect3; // *
-    Image ship;
-// Game state Variables   
-    int score = 0; // Total enemies hit 
-    boolean enemyHit = false; // Checks if the enemy was hit 
-    boolean enemyOnField = false; // Checks if an enemy is present on the screen
-    boolean shoot, special, left, right; // Input handling, used to smooth movement
-
-    int starSpeed = 3; // Starfield Movement speed
     
-// Player Variables
+    Image ship;
+    
+    Image rocket;
+    Image rocketLeft;
+    Image rocketRight;
+    Image fire1;
+    Image fire2;
+    Image fire3;
+    Image fire4;
+    Image fire5;
+    Image fire6;
+    
+    
+    boolean enemyHit = false;
+    boolean enemeyOnField = false;
+    
+    int timer = 0;
     int playerX = 0;
     int bulletY = 0;
+    int tilt = 0;
     int bulletSpeed = 5; // Changed the speed to 6
     int clipSize = 3; // Special Move counter? 
-    int moveSpeed = 3; // Player Movement Spee
-  
-
-// Imported files
-    String filepath = "src/profhack2020/Catch the mystery 120 BPM.wav"; // BGM
-    music musicObject = new music(); 
+    int moveSpeed = 3;
+    int starSpeed = 3;
+    boolean shoot, special, left, right; // Input handling
+    ArrayList<Rectangle> bullets1 = new ArrayList<Rectangle>(0);
+    ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
+    
+    String filepath = "src/profhack2020/Catch the mystery 120 BPM.wav";
+    music musicObject = new music();
     
     public Random Gen = new Random();
     
-// Clock
     Clock updateClock = Clock.systemDefaultZone();
     Clock temp = Clock.offset(updateClock, Duration.ofMillis(1));
     Instant update = temp.instant();
@@ -87,10 +93,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         musicObject.playMusic(filepath); // Plays the background music
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH/8), (SCREEN_WIDTH/8)); // Initial start of the player
         // These will exist off screen 
-        enemyRect1 = new Rectangle(SCREEN_WIDTH / 16 , 50 , 50, 50); 
-        enemyRect2 = new Rectangle((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 32), 50 , 50, 50);
-        enemyRect3 = new Rectangle(SCREEN_WIDTH - (SCREEN_WIDTH / 8),50, 50, 50);
-        
+        enemyRect1 = new Rectangle(50, 50 -25 , 50, 50); 
+        enemyRect2 = new Rectangle(50, (SCREEN_WIDTH / 2 ) - 25 , 50, 50);
+        enemyRect3 = new Rectangle(50,SCREEN_WIDTH, 50, 50);
         bulletBase = new Rectangle(playerRect.x + (playerRect.width/2), playerRect.y, 5, 25);
         bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
         bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
@@ -102,7 +107,16 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try { // 
-            ship = ImageIO.read(new File("src/profhack2020/ship2.png"));
+            rocket = ImageIO.read(new File("src/profhack2020/Rocket.png"));
+            rocketRight = ImageIO.read(new File("src/profhack2020/RocketRight.png"));
+            rocketLeft = ImageIO.read(new File("src/profhack2020/RocketLeft.png"));
+            fire1 = ImageIO.read(new File("src/profhack2020/fire2.png"));
+            fire2 = ImageIO.read(new File("src/profhack2020/fire3.png"));
+            fire3 = ImageIO.read(new File("src/profhack2020/fire4.png"));
+            fire4 = ImageIO.read(new File("src/profhack2020/fire5.png"));
+            fire5 = ImageIO.read(new File("src/profhack2020/fire6.png"));
+            fire6 = ImageIO.read(new File("src/profhack2020/fire7.png"));
+            
             
 
         } catch (IOException e) {
@@ -111,17 +125,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void update() {
-        playerMovement(); // Handles movement
+        playerMovement();
+        timer++;
+        playerRect.x += playerX; // GOING TO CHANGE THIS IT'S OWN METHOD
         bulletY = bulletSpeed * -1;
         Boarders(playerRect);
         bulletBase.x = playerRect.x + (playerRect.width/2);
         bulletBase.y = playerRect.y;
-        if(enemyOnField){
-            if(!enemyHit) {
-            deleteEnemy(enemyRect1);
-            }else{
-                
-            }
+        if(!enemeyOnField){
+            
         }
         
         if(!bullets1.isEmpty()){
@@ -192,6 +204,59 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             g.fillRect(bullets1.get(i).x, bullets1.get(i).y, bullets1.get(i).width, bullets1.get(i).height);
             g.fillRect(bullets2.get(i).x, bullets2.get(i).y, bullets2.get(i).width, bullets2.get(i).height);
         }
+        // draws the ship tilting depending on which way the player is moving
+        if (tilt == 0) {
+            g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        if (tilt == -1) {
+            g.drawImage(rocketLeft, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        if (tilt == 1) {
+            g.drawImage(rocketRight, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        //fire
+        
+        if (timer >= 210) {
+            timer = 0;
+        }
+
+        if (timer <= 35) {
+            g.drawImage(fire1, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 36 && timer <= 70) {
+            g.drawImage(fire2, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 71 && timer <= 105) {
+            g.drawImage(fire3, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 106 && timer <= 140) {
+            g.drawImage(fire4, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 141 && timer <= 175) {
+            g.drawImage(fire5, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 176 && timer <= 210) {
+            g.drawImage(fire6, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+
+        if (timer <= 35) {
+            g.drawImage(fire6, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 36 && timer <= 70) {
+            g.drawImage(fire5, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 71 && timer <= 105) {
+            g.drawImage(fire4, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 106 && timer <= 140) {
+            g.drawImage(fire3, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 141 && timer <= 175) {
+            g.drawImage(fire2, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 176 && timer <= 210) {
+            g.drawImage(fire1, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
         
         // Enemy Draw Routines
         g.setColor(Color.LIGHT_GRAY); // sets enemy color
@@ -222,7 +287,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void playerMovement(){ // This method will handle movement speed
-        
+        ;
         if(left){ // This moves player left
            // System.out.println("Left");
             playerRect.x = playerRect.x - moveSpeed;
@@ -232,35 +297,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             playerRect.x = playerRect.x + moveSpeed;
         
         }
-        playerRect.x += playerX;
-
     }
-    public void enemyEnterScreen(){
-        
-    }
-    public void enemyLeaveScreen(){
-        
-    }
-    public void enemyShooting(){
-        
-    }    
-    public void enemyKilled(){
-        
-    }
-    public void enemy(){ // This will handle all the enemy structure
-        if(!enemyOnField){
-            enemyEnterScreen();
-        }else{
-            if (!enemyHit){
-                enemyShooting();
-                if (enemyHit){
-                    enemyKilled();
-                }
-            }else if (enemyHit){
-                enemyKilled();
-            }
-        }
-    }
+    
     public static void main(String[] args) {
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
