@@ -621,7 +621,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
 
     public static void main(String[] args) {
-        SplashWindow1("/src/profhack2020", Frame f)
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
         frame.setTitle("ProfHacks2020: Space Shooter");
@@ -685,34 +684,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             case KeyEvent.VK_ESCAPE: // Emergency Esc from program
                 System.exit(0);
         }
-        /*
-        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            enemyEntersScreen(enemyRect1,spawnEnemy1);
-        }
-
-        //startGame = true;
-        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            enemyEntersScreen(enemyRect1, spawnEnemy1);
-        }
-         */
     }
 
 }
-class SplashWindow1 extends JWindow
-{
-    public SplashWindow1(String filename, Frame f)
-    {
-        super(f);
-        JLabel l = new JLabel(new ImageIcon(filename));
-        getContentPane().add(l, BorderLayout.CENTER);
-        pack();
-        Dimension screenSize =
-          Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension labelSize = l.getPreferredSize();
-        setLocation(screenSize.width/2 - (labelSize.width/2),
-                    screenSize.height/2 - (labelSize.height/2));
-        setVisible(true);
-        screenSize = null;
-        labelSize = null;
-    }
-}
+
