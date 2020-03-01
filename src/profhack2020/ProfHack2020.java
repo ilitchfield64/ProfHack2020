@@ -28,22 +28,27 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Gavin
+ * @author Gavin O'Hanlon, Ian Litchfield, Jan Puzon, John Giles
  */
 public class ProfHack2020 extends JPanel implements KeyListener {
     
     final int SCREEN_WIDTH = 600;
     final int SCREEN_HEIGHT = 800;
-    
-    Rectangle playerRect;
+//Items on screen
+    // Backgound
     Rectangle[] stars;
+    // Midground boxes
     Rectangle bulletBase;
     Rectangle bullet1;
     Rectangle bullet2;
-    Rectangle enemyRect;
-    
+    // Foreground
+    Rectangle playerRect; // Player hit box
+    Rectangle enemyRect1; // Enemy Hitboxes
+    Rectangle enemyRect2; // *
+    Rectangle enemyRect3; // *
     Image ship;
     
+    boolean enemyHit = false;
     boolean enemeyOnField = false;
     
     int playerX = 0;
@@ -73,7 +78,10 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         
         musicObject.playMusic(filepath); // Plays the background music
         playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH/8), (SCREEN_WIDTH/8)); // Initial start of the player
-        enemyRect = new Rectangle(0, 0, 50, 50); 
+        // These will exist off screen 
+        enemyRect1 = new Rectangle(50, 50 -25 , 50, 50); 
+        enemyRect2 = new Rectangle(50, (SCREEN_WIDTH / 2 ) - 25 , 50, 50);
+        enemyRect3 = new Rectangle(50,SCREEN_WIDTH, 50, 50);
         bulletBase = new Rectangle(playerRect.x + (playerRect.width/2), playerRect.y, 5, 25);
         bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
         bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
@@ -85,7 +93,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try { // 
-            ship = ImageIO.read(new File("src/profhack2020/ship.png"));
+            ship = ImageIO.read(new File("src/profhack2020/ship2.png"));
             
 
         } catch (IOException e) {
@@ -101,17 +109,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         bulletBase.x = playerRect.x + (playerRect.width/2);
         bulletBase.y = playerRect.y;
         if(!enemeyOnField){
-            spawnEnemy(enemyRect);
-            for(int i = 0; i < 100; i ++){
-                enemyRect.y ++;
-            }
-            for(int i = 0; i < 100; i ++){
-                enemyRect.x ++;
-            }
-            for(int i = 0; i < 100; i ++){
-                enemyRect.x --;
-            }
-            deleteEnemy(enemyRect);
+            enemy = 
+            if(hitEnemy) 
+            deleteEnemy(enemyRect1);
         }
         
         if(!bullets1.isEmpty()){
@@ -140,14 +140,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             starMove(stars[i], x, y);
         }
     }
-    public void spawnEnemy(Rectangle b){
-        b.x = Gen.nextInt(SCREEN_WIDTH);
-        b.y = -50;
-    }
+    
+    // This removes the enemy from the screen 
     public void deleteEnemy(Rectangle b){
+        // Add lines for a death animation
+        
         b.x = Gen.nextInt(SCREEN_WIDTH);
         b.y = -50;
     }
+    // This allows the starfield to move
     public void starMove(Rectangle Star, int x, int y) {
         Star.y += starSpeed;
         if (Star.y >= SCREEN_HEIGHT) {
@@ -156,6 +157,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
 
     }
+    // Creates the borders preventing the player from leaving the screen
     public void Boarders(Rectangle b) {
 
         if (b.x <= 0) {
@@ -165,30 +167,37 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             b.x -= moveSpeed;
         }
     }
-    public void paint(Graphics g) {
+    public void paint(Graphics g) { // Graphics Routine  **Why not make submethods that handle layers??**
         super.paint(g);
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        // Draws the Background
+        g.setColor(Color.BLACK); // Set Background color
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Fills Background with black
         g.setColor(Color.WHITE);
-        for (int i = 0; i < stars.length; i++) {
+        for (int i = 0; i < stars.length; i++) { // This randomizes stars on the background
             g.fillRect(stars[i].x, stars[i].y, stars[i].width, stars[i].height);
         }
-        
-        g.setColor(Color.RED);
+        // Draws the Bullets
+        g.setColor(Color.RED); 
         for(int i = 0; i < bullets1.size(); i ++){
             g.fillRect(bullets1.get(i).x, bullets1.get(i).y, bullets1.get(i).width, bullets1.get(i).height);
             g.fillRect(bullets2.get(i).x, bullets2.get(i).y, bullets2.get(i).width, bullets2.get(i).height);
         }
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(enemyRect.x, enemyRect.y, enemyRect.width, enemyRect.height);
         
-        g.drawImage(ship, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        // Enemy Draw Routines
+        g.setColor(Color.LIGHT_GRAY); // sets enemy color
+        g.fillRect(enemyRect1.x, enemyRect1.y, enemyRect1.width, enemyRect1.height); // Draws enemy 1s box
+        g.fillRect(enemyRect2.x, enemyRect2.y, enemyRect2.width, enemyRect2.height); // Draws enemy 2s box
+        g.fillRect(enemyRect3.x, enemyRect3.y, enemyRect3.width, enemyRect3.height); // Draws enemy 3s box
+        
+        // Draws the Player on the screen
+        g.drawImage(ship, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
 
-        if (updateClock.instant().compareTo(update) >= 0) {
+        if (updateClock.instant().compareTo(update) >= 0) { //updates clock cycle
             resetUpdateClock();
             update();
         }
-        repaint();
+        repaint(); // Repaints the screen
+        
     }
     
     public void resetUpdateClock() {
@@ -271,6 +280,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
                 right = true;
                // System.out.println("D Pressed");
                 break;
+            case KeyEvent.VK_ESCAPE: // Emergency Esc from program
+                System.exit(0);
         }
     }
     
