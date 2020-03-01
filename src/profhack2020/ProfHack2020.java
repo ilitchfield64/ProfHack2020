@@ -88,7 +88,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean startGame = false; // When false, Title Screen is displayed
 
     int starSpeed = 3; // Starfield Movement speed
-
+    
+    int Score = 0;
     int timerA = 0;
     int timer = 0;
     int timerF = 0;
@@ -328,22 +329,23 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
 
         enemyHit();
-        //playerHit();
+        playerHit();
 
     } /////// THE END OF UPDATE
+// When ANYTHING intersects the player
 
-// When ANYTHING intersects the player it crashes
+    public void gameOver() {
+        System.out.println("Game Over");
+        System.out.println("Your Score was " + Score);
+        System.exit(0);
+    }
 
     public void playerHit() {
         if (enemyAstroid1.intersects(playerRect)) {
-            System.out.println("Dead");
+            gameOver();
         }
         if (enemyAstroid2.intersects(playerRect)) {
-            System.out.println("Dead");
-
-        }
-        if (enemyBullet1.intersects(playerRect)) {
-            System.out.println("Dead");
+            gameOver();
 
         }
 
