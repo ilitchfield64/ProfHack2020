@@ -50,7 +50,16 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Rectangle enemyRect1; // Enemy Hitboxes
     Rectangle enemyRect2; // *
     Rectangle enemyRect3; // *
-    Image ship;
+    
+    Image rocket;
+    Image rocketLeft;
+    Image rocketRight;
+    Image fire1;
+    Image fire2;
+    Image fire3;
+    Image fire4;
+    Image fire5;
+    Image fire6;
 // Game state Variables   
     int score = 0; // Total enemies hit 
     boolean enemyHit = false; // Checks if the enemy was hit 
@@ -58,6 +67,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean shoot, special, left, right; // Input handling, used to smooth movement
 
     int starSpeed = 3; // Starfield Movement speed
+    
+    int timer = 0;
+    int tilt = 0;
     
 // Player Variables
     int playerX = 0;
@@ -103,8 +115,15 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try { // 
-            ship = ImageIO.read(new File("src/profhack2020/ship2.png"));
-            
+            rocket = ImageIO.read(new File("src/profhack2020/Rocket.png"));
+            rocketRight = ImageIO.read(new File("src/profhack2020/RocketRight.png"));
+            rocketLeft = ImageIO.read(new File("src/profhack2020/RocketLeft.png"));
+            fire1 = ImageIO.read(new File("src/profhack2020/fire2.png"));
+            fire2 = ImageIO.read(new File("src/profhack2020/fire3.png"));
+            fire3 = ImageIO.read(new File("src/profhack2020/fire4.png"));
+            fire4 = ImageIO.read(new File("src/profhack2020/fire5.png"));
+            fire5 = ImageIO.read(new File("src/profhack2020/fire6.png"));
+            fire6 = ImageIO.read(new File("src/profhack2020/fire7.png"));
 
         } catch (IOException e) {
             print("Image missing");
@@ -112,6 +131,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
     
     public void update() {
+        timer ++;
         playerMovement(); // Handles movement
         bulletY = bulletSpeed * -1;
         Boarders(playerRect);
@@ -201,12 +221,69 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         g.fillRect(enemyRect3.x, enemyRect3.y, enemyRect3.width, enemyRect3.height); // Draws enemy 3s box
         
         // Draws the Player on the screen
-        g.drawImage(ship, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
+        g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
 
         if (updateClock.instant().compareTo(update) >= 0) { //updates clock cycle
             resetUpdateClock();
             update();
         }
+        
+        // draws the ship tilting depending on which way the player is moving
+        if (tilt == 0) {
+            g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        if (tilt == -1) {
+            g.drawImage(rocketLeft, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        if (tilt == 1) {
+            g.drawImage(rocketRight, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+        }
+        //fire
+        
+        if (timer >= 210) {
+            timer = 0;
+        }
+
+        if (timer <= 35) {
+            g.drawImage(fire1, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 36 && timer <= 70) {
+            g.drawImage(fire2, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 71 && timer <= 105) {
+            g.drawImage(fire3, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 106 && timer <= 140) {
+            g.drawImage(fire4, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 141 && timer <= 175) {
+            g.drawImage(fire5, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 176 && timer <= 210) {
+            g.drawImage(fire6, playerRect.x + 22, playerRect.y + 98, 15, 15, null);
+        }
+
+        if (timer <= 35) {
+            g.drawImage(fire6, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 36 && timer <= 70) {
+            g.drawImage(fire5, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 71 && timer <= 105) {
+            g.drawImage(fire4, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 106 && timer <= 140) {
+            g.drawImage(fire3, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 141 && timer <= 175) {
+            g.drawImage(fire2, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        if (timer >= 176 && timer <= 210) {
+            g.drawImage(fire1, playerRect.x + 44, playerRect.y + 98, 15, 15, null);
+        }
+        
+        
+        
         repaint(); // Repaints the screen
         
     }
