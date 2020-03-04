@@ -8,6 +8,7 @@ package profhack2020;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -55,7 +56,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     ArrayList<Rectangle> bullets2 = new ArrayList<Rectangle>(0);
 
     // Foreground
-    Rectangle playerRect; // Player hit box
+    Rectangle playerDrawnRect; // Where to draw the player
+    Rectangle playerHitRect; // Player hit box
     Rectangle enemyRect1; // Enemy Hitboxes
     Rectangle enemyRect2; // *
     Rectangle enemyRect3; // *
@@ -98,7 +100,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean startGame = false; // When false, Title Screen is displayed
 
     int starSpeed = 3; // Starfield Movement speed
-
+    int health = 100;
     int Score = 0;
     int timerA = 0;
     int timer = 0;
@@ -114,7 +116,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     int moveSpeed = 3; // Player Movement Spee
 
 // Imported files
-    String filepath = "src/profhack2020/Catch the mystery 120 BPM.wav"; // BGM
+    String filepath = "src/profhack2020/bgm1.wav"; // BGM
     music musicObject = new music();
 
     public Random Gen = new Random();
@@ -126,14 +128,21 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     Instant update = temp.instant();
 
     public ProfHack2020() throws MalformedURLException {
+        // Creates the JOption Panel for the screen
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setFocusable(true);
         addKeyListener(this);
-        final ImageIcon icon = new ImageIcon(new URL("https://i.imgur.com/NVrXZR9.gif"));
-        JOptionPane.showMessageDialog(null, "", "About", JOptionPane.INFORMATION_MESSAGE, icon);
-
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("title_1.gif"));
+        JOptionPane.showMessageDialog(null, "", "Space Escape: Fight For Your Life", JOptionPane.INFORMATION_MESSAGE, icon);
+        
+        // Plays the background music
         musicObject.playMusic(filepath); // Plays the background music
-        playerRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH / 8), (SCREEN_WIDTH / 8)); // Initial start of the player
+        
+        
+        // Player rectangles
+        playerDrawnRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH / 8), (SCREEN_WIDTH / 8)); // Initial start of the player
+        playerHitRect = new Rectangle((SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) - 25, (SCREEN_WIDTH / 8), (SCREEN_WIDTH / 8));
         // Enemies and attacks
         defaultEnemy = new Rectangle(-100, -50, 0, 0);
         enemyRect1 = new Rectangle(SCREEN_WIDTH / 16, -50, 50, 50);
@@ -149,7 +158,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         enemyAstroid2 = new Rectangle(-100, 0, 50, 50);
         enemyAstroid3 = new Rectangle(-100, 0, 50, 50);
 
-        bulletBase = new Rectangle(playerRect.x + (playerRect.width / 2), playerRect.y, 5, 25);
+        bulletBase = new Rectangle(playerDrawnRect.x + (playerDrawnRect.width / 2), playerDrawnRect.y, 5, 25);
         bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
         bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
         stars = new Rectangle[100];
@@ -160,223 +169,36 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             stars[i] = new Rectangle(x, y, 5, 5);
         }
         try { // Images
-            title = ImageIO.read(new File("src/profhack2020/title.gif"));
-
-            astroid = ImageIO.read(new File("src/profhack2020/astroid.png"));
-            enemy = ImageIO.read(new File("src/profhack2020/enemyTile.png"));
-            rocket = ImageIO.read(new File("src/profhack2020/Rocket.png"));
-            rocketRight = ImageIO.read(new File("src/profhack2020/RocketRight.png"));
-            rocketLeft = ImageIO.read(new File("src/profhack2020/RocketLeft.png"));
-            fire1 = ImageIO.read(new File("src/profhack2020/fire2.png"));
-            fire2 = ImageIO.read(new File("src/profhack2020/fire3.png"));
-            fire3 = ImageIO.read(new File("src/profhack2020/fire4.png"));
-            fire4 = ImageIO.read(new File("src/profhack2020/fire5.png"));
-            fire5 = ImageIO.read(new File("src/profhack2020/fire6.png"));
-            fire6 = ImageIO.read(new File("src/profhack2020/fire7.png"));
+            URL url = this.getClass().getResource("astroid.png"); // This Object allows the images to be loaded from inside of a jar!!!!
+            astroid= ImageIO.read(url);
+            url = this.getClass().getResource("enemyTile.png");
+            enemy= ImageIO.read(url);
+            url = this.getClass().getResource("Rocket.png");
+            rocket= ImageIO.read(url);
+            url = this.getClass().getResource("RocketRight.png");
+            rocketRight= ImageIO.read(url);
+            url = this.getClass().getResource("RocketLeft.png");
+            rocketLeft= ImageIO.read(url);
+            url = this.getClass().getResource("fire2.png");
+            fire1= ImageIO.read(url);
+            url = this.getClass().getResource("fire3.png");
+            fire2= ImageIO.read(url);
+            url = this.getClass().getResource("fire4.png");
+            fire3= ImageIO.read(url);
+            url = this.getClass().getResource("fire5.png");
+            fire4= ImageIO.read(url);
+            url = this.getClass().getResource("fire6.png");
+            fire5= ImageIO.read(url);
+            url = this.getClass().getResource("fire7.png");
+            fire6= ImageIO.read(url);
 
         } catch (IOException e) {
-            print("Image missing");
+            System.out.println("Image missing");
         }
 
     }
 
-    public void update() {
-        timerA++;
-        timerF++;
-        timer++;
 
-        if (timer
-                >= 210) {
-            timer = 0;
-        }
-
-        if (timerF
-                < 5) {
-            timerF++;
-
-        }
-        if (timerF
-                < 5) {
-            timerF++;
-        } else if (timerF >= 5 && timerF
-                <= 10) {
-            timerF++;
-        }
-        if (timerF
-                >= 10) {
-            timerF = 0;
-        }
-        // Astroids coming on screen
-        if (astroid3) {
-            if (enemyAstroid3.y >= SCREEN_HEIGHT + 50) {
-                enemyAstroid3.y = -100;
-                enemyAstroid3.x = Gen.nextInt((SCREEN_WIDTH - 50));
-                astroid3 = false;
-            }
-            enemyAstroid3.y += astroidSpeed;
-        }
-        if (astroid2) {
-            if (enemyAstroid2.y >= SCREEN_HEIGHT + 50) {
-                enemyAstroid2.y = -100;
-                enemyAstroid2.x = Gen.nextInt((SCREEN_WIDTH - 50));
-                astroid2 = false;
-            }
-            enemyAstroid2.y += astroidSpeed;
-        }
-        if (astroid1) {
-            if (enemyAstroid1.y >= SCREEN_HEIGHT + 50) {
-                enemyAstroid1.y = -100;
-                enemyAstroid1.x = Gen.nextInt((SCREEN_WIDTH - 50));
-                astroid1 = false;
-            }
-            enemyAstroid1.y += astroidSpeed;
-        }
-
-        if (timerA >= 500 && timerA <= 550) {
-            astroid1 = true;
-        }
-        if (timerA == 500 + Gen.nextInt(400)) {
-            astroid2 = true;
-        }
-        if (timerA == 500 + Gen.nextInt(200)) {
-            astroid3 = true;
-        }
-        if (timerA
-                >= 1000) {
-            timerA = 0;
-        }
-
-        playerMovement(); // Handles movement
-        bulletY = bulletSpeed * -1;
-
-        Boarders(playerRect);
-        bulletBase.x = playerRect.x + (playerRect.width / 2);
-        bulletBase.y = playerRect.y;
-        if (enemyOnField) {
-            if (!enemyHit) {
-                deleteEnemy(enemyRect1);
-            } else {
-
-            }
-        }
-        // Bullet shooting timer and movement
-
-        if (!bullets1.isEmpty()) {
-            for (int i = 0; i < bullets1.size(); i++) {
-                if (bullets1.get(i).y <= 0) {
-                    bullets1.remove(i);
-                    bullets2.remove(i);
-
-                } else {
-                    bullet1.y += bulletY;
-                    bullet2.y += bulletY;
-                    bullets1.set(i, bullet1);
-                    bullets2.set(i, bullet2);
-                }
-            }
-        } else {
-            bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
-            bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
-        }
-        // Stars randoming
-        for (int i = 0;
-                i < stars.length;
-                i++) {
-            int x = Gen.nextInt(SCREEN_WIDTH);
-            int y = Gen.nextInt(700) * -1;
-            starMove(stars[i], x, y);
-        }
-
-        // This code handles the random generation of the Enemies
-        if ((spawnEnemy()
-                == 1) || spawnEnemy1) {
-            enemyEntersScreen1(enemyRect1);
-            int temp = Gen.nextInt(2);
-            if (temp == 0) {
-                enemyBulletRect1.x = enemyRect1.x;
-                if (enemyBulletRect1.y < SCREEN_HEIGHT) {
-                    enemyBulletRect1.y += bulletSpeed;
-                } else {
-                    enemyBulletRect1.y = enemyRect1.y;
-                }
-            }
-
-            if (enemyBulletRect1.intersects(playerRect)) {
-                gameOver();
-            }
-        }
-
-        if (spawnEnemy()
-                == 2 || spawnEnemy2) {
-            enemyEntersScreen2(enemyRect2);
-            int temp = Gen.nextInt(2);
-            if (temp == 0) {
-                enemyBulletRect2.x = enemyRect2.x;
-                if (enemyBulletRect2.y < SCREEN_HEIGHT) {
-                    enemyBulletRect2.y += bulletSpeed;
-                } else {
-                    enemyBulletRect2.y = enemyRect2.y;
-                }
-            }
-
-            if (enemyBulletRect2.intersects(playerRect)) {
-                gameOver();
-            }
-        }
-
-        if (spawnEnemy()
-                == 3 || spawnEnemy3) {
-            enemyEntersScreen3(enemyRect3);
-            int temp = Gen.nextInt(2);
-            if (temp == 0) {
-                enemyBulletRect3.x = enemyRect3.x;
-                if (enemyBulletRect3.y < SCREEN_HEIGHT) {
-                    enemyBulletRect3.y += bulletSpeed;
-                } else {
-                    enemyBulletRect3.y = enemyRect3.y;
-                }
-            }
-
-            if (enemyBulletRect3.intersects(playerRect)) {
-                gameOver();
-            }
-
-        }
-
-        enemyHit();
-        if (spawnEnemy1 == false) {
-            enemyBulletRect1.x = -100;
-        }
-        if (spawnEnemy2 == false) {
-            enemyBulletRect2.x = -100;
-        }
-        if (spawnEnemy3 == false) {
-            enemyBulletRect3.x = -100;
-        }
-        playerHit();
-
-    } /////// THE END OF UPDATE
-// When ANYTHING intersects the player
-
-    public void title() {
-
-    }
-
-    public void gameOver() {
-        JOptionPane.showMessageDialog(null, "GAME OVER! Your Score was: " + Score);
-        System.exit(0);
-    }
-
-    public void playerHit() {
-        if (enemyAstroid1.intersects(playerRect)) {
-            gameOver();
-        }
-        if (enemyAstroid2.intersects(playerRect)) {
-            gameOver();
-
-        }
-
-    }
 
     // This decides what enemy goes where
     public int spawnEnemy() {
@@ -392,12 +214,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
             }
         }
         return 0;
-    }
-
-    public void leaveScreen(Rectangle enemyRect) {
-        if (enemyRect.y > -75) {
-            enemyRect.y--;
-        }
     }
 
     // Enemy randomly will enter the screen
@@ -457,6 +273,20 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         score++;
 
     }
+    // Method is used in one spot??
+    public void deleteEnemy(Rectangle b) {
+        // Add lines for a death animation
+
+        b.x = Gen.nextInt(SCREEN_WIDTH - 100);
+        b.y = -50;
+
+    }
+    // Enemy will leave the screen after given amount of time
+    public void leaveScreen(Rectangle enemyRect) {
+        if (enemyRect.y > -75) {
+            enemyRect.y--;
+        }
+    }
 
     // Checks if the ememy is hit by bullet
     public void enemyHit() {
@@ -477,13 +307,6 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
     }
 
-    public void deleteEnemy(Rectangle b) {
-        // Add lines for a death animation
-
-        b.x = Gen.nextInt(SCREEN_WIDTH - 100);
-        b.y = -50;
-
-    }
 
     // This allows the starfield to move
     public void starMove(Rectangle Star, int x, int y) {
@@ -506,6 +329,242 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
     }
 
+
+
+
+    public void playerMovement() { // This method will handle movement speed
+
+        if (left) { // This moves player left
+            // System.out.println("Left");
+            playerDrawnRect.x = playerDrawnRect.x - moveSpeed;
+        }
+        if (right) { // This moves player right
+            //  System.out.println("Right");
+            playerDrawnRect.x = playerDrawnRect.x + moveSpeed;
+
+        }
+        playerDrawnRect.x += playerX;
+
+    }
+    
+    // When ANYTHING intersects the player
+    public void playerHit() {
+        if (enemyAstroid1.intersects(playerDrawnRect)) {
+            
+            --health;
+        }
+        if (enemyAstroid2.intersects(playerDrawnRect)) {
+            --health;
+
+        }
+        if(health < 0){
+            gameOver();
+        }
+    }
+    public void update() {
+        timerA++;
+        timerF++;
+        timer++;
+
+        if (timer
+                >= 210) {
+            timer = 0;
+        }
+
+        if (timerF
+                < 5) {
+            timerF++;
+
+        }
+        if (timerF
+                < 5) {
+            timerF++;
+        } else if (timerF >= 5 && timerF
+                <= 10) {
+            timerF++;
+        }
+        if (timerF
+                >= 10) {
+            timerF = 0;
+        }
+    
+        // Astroids coming on screen
+        if (astroid3) {
+            if (enemyAstroid3.y >= SCREEN_HEIGHT + 50) {
+                enemyAstroid3.y = -100;
+                enemyAstroid3.x = Gen.nextInt((SCREEN_WIDTH - 50));
+                astroid3 = false;
+            }
+            enemyAstroid3.y += astroidSpeed;
+        }
+        if (astroid2) {
+            if (enemyAstroid2.y >= SCREEN_HEIGHT + 50) {
+                enemyAstroid2.y = -100;
+                enemyAstroid2.x = Gen.nextInt((SCREEN_WIDTH - 50));
+                astroid2 = false;
+            }
+            enemyAstroid2.y += astroidSpeed;
+        }
+        if (astroid1) {
+            if (enemyAstroid1.y >= SCREEN_HEIGHT + 50) {
+                enemyAstroid1.y = -100;
+                enemyAstroid1.x = Gen.nextInt((SCREEN_WIDTH - 50));
+                astroid1 = false;
+            }
+            enemyAstroid1.y += astroidSpeed;
+        }
+
+        if (timerA >= 500 && timerA <= 550) {
+            astroid1 = true;
+        }
+        if (timerA == 500 + Gen.nextInt(400)) {
+            astroid2 = true;
+        }
+        if (timerA == 500 + Gen.nextInt(200)) {
+            astroid3 = true;
+        }
+        if (timerA
+                >= 1000) {
+            timerA = 0;
+        }
+
+        playerMovement(); // Handles movement
+        bulletY = bulletSpeed * -1;
+
+        Boarders(playerDrawnRect);
+        bulletBase.x = playerDrawnRect.x + (playerDrawnRect.width / 2);
+        bulletBase.y = playerDrawnRect.y;
+        
+        // !!!!!!!!!!!!!! Have to figure why this is here ~~~~~~~~~~~~~~~~~~~{
+        if (enemyOnField) {
+            if (!enemyHit) {
+                deleteEnemy(enemyRect1);
+            } else {
+
+            }
+        } //!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}
+        // Bullet shooting timer and movement
+
+        if (!bullets1.isEmpty()) {
+            for (int i = 0; i < bullets1.size(); i++) {
+                if (bullets1.get(i).y <= 0) {
+                    bullets1.remove(i);
+                    bullets2.remove(i);
+
+                } else {
+                    bullet1.y += bulletY;
+                    bullet2.y += bulletY;
+                    bullets1.set(i, bullet1);
+                    bullets2.set(i, bullet2);
+                }
+            }
+        } else {
+            bullet1 = new Rectangle(bulletBase.x, bulletBase.y, bulletBase.width, bulletBase.height);
+            bullet2 = new Rectangle(bulletBase.x - 8, bulletBase.y, bulletBase.width, bulletBase.height);
+        }
+        // Stars randoming
+        for (int i = 0;
+                i < stars.length;
+                i++) {
+            int x = Gen.nextInt(SCREEN_WIDTH);
+            int y = Gen.nextInt(700) * -1;
+            starMove(stars[i], x, y);
+        }
+
+        // This code handles enemy "AI"
+        if ((spawnEnemy()
+                == 1) || spawnEnemy1) {
+            enemyEntersScreen1(enemyRect1);
+            int temp = Gen.nextInt(2);
+            if (temp == 0) {
+                enemyBulletRect1.x = enemyRect1.x;
+                if (enemyBulletRect1.y < SCREEN_HEIGHT) {
+                    enemyBulletRect1.y += bulletSpeed;
+                } else {
+                    enemyBulletRect1.y = enemyRect1.y;
+                }
+            }
+
+            if (enemyBulletRect1.intersects(playerDrawnRect)) {
+                System.out.println("Hit by enemy 1");
+                if(health < 0){
+                    gameOver();
+                }else{
+                  //  enemyBulletRect1.y = SCREEN_HEIGHT +100 ;
+                    health-=1;
+                }
+            }
+        }
+
+        if (spawnEnemy()
+                == 2 || spawnEnemy2) {
+            enemyEntersScreen2(enemyRect2);
+            int temp = Gen.nextInt(2);
+            if (temp == 0) {
+                enemyBulletRect2.x = enemyRect2.x;
+                if (enemyBulletRect2.y < SCREEN_HEIGHT) {
+                    enemyBulletRect2.y += bulletSpeed;
+                } else {
+                    enemyBulletRect2.y = enemyRect2.y;
+                }
+            }
+
+            if (enemyBulletRect2.intersects(playerDrawnRect)) {
+                System.out.println("Hit by Enemy 2");
+                if(health < 0){
+                    gameOver();
+                }else{
+                   // enemyBulletRect2.y = SCREEN_HEIGHT +100 ;
+                    health-=1;
+                }
+            }
+        }
+
+        if (spawnEnemy()
+                == 3 || spawnEnemy3) {
+            enemyEntersScreen3(enemyRect3);
+            int temp = Gen.nextInt(2);
+            if (temp == 0) {
+                enemyBulletRect3.x = enemyRect3.x;
+                if (enemyBulletRect3.y < SCREEN_HEIGHT) {
+                    enemyBulletRect3.y += bulletSpeed;
+                } else {
+                    enemyBulletRect3.y = enemyRect3.y;
+                }
+            }
+
+            if (enemyBulletRect3.intersects(playerDrawnRect)) {
+                System.out.println("Hit by enemy 3");
+                if(health < 0){
+                    gameOver();
+                }else{
+                   // enemyBulletRect2.y = SCREEN_HEIGHT +100 ;
+                    health-=1;
+                }
+            }
+        }
+
+        enemyHit();
+        if (spawnEnemy1 == false) {
+            enemyBulletRect1.y = SCREEN_HEIGHT+100;
+        }
+        if (spawnEnemy2 == false) {
+            enemyBulletRect2.y = SCREEN_HEIGHT+100;
+        }
+        if (spawnEnemy3 == false) {
+            enemyBulletRect3.y = SCREEN_HEIGHT+100;
+        }
+        playerHit();
+
+    } /////// THE END OF UPDATE
+    
+    // Resets the clock
+    public void resetUpdateClock() {
+        temp = Clock.offset(updateClock, Duration.ofMillis(4));
+        update = temp.instant();
+        //clock2 = clock2.plusSeconds(2);
+    }
+    
     // Graphics
     public void paint(Graphics g) { // Graphics Routine  **Why not make submethods that handle layers??**
         super.paint(g);
@@ -517,6 +576,12 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         for (int i = 0; i < stars.length; i++) { // This randomizes stars on the background
             g.fillRect(stars[i].x, stars[i].y, stars[i].width, stars[i].height);
         }
+        g.setColor(Color.DARK_GRAY);
+        Font font = new Font("Comic Sans", Font.BOLD,28);
+        g.setFont(font);
+        g.drawString("Health: " + health+"%", 15, 25);
+        g.drawString("Score: " + score, 15, 50);
+        
 
         // Draws the Bullets
         g.setColor(Color.RED);
@@ -540,7 +605,9 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         g.drawImage(enemy, enemyRect3.x, enemyRect3.y, enemyRect3.width, enemyRect3.height, null); // Draws enemy 3s box
 
         // Draws the Player on the screen
-        g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null); // Draws the player image
+        g.setColor(Color.blue);
+        g.fillRect(playerDrawnRect.x, playerDrawnRect.y, playerDrawnRect.width, playerDrawnRect.height);
+        g.drawImage(rocket, playerDrawnRect.x, playerDrawnRect.y, playerDrawnRect.width, playerDrawnRect.height, null); // Draws the player image
 
         // Draws flashing rectangle
         if (timerF <= 5) {
@@ -553,53 +620,53 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         }
 
         // Fire Animation
+        //playerFire();
         if (timer <= 35) {
-            g.drawImage(fire1, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire1, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 36 && timer <= 70) {
-            g.drawImage(fire2, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire2, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 71 && timer <= 105) {
-            g.drawImage(fire3, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire3, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 106 && timer <= 140) {
-            g.drawImage(fire4, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire4, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 141 && timer <= 175) {
-            g.drawImage(fire5, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire5, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 176 && timer <= 210) {
-            g.drawImage(fire6, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire6, playerDrawnRect.x + 22, playerDrawnRect.y + 73, 10, 15, null);
         }
 
         if (timer <= 35) {
-            g.drawImage(fire6, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire6, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 36 && timer <= 70) {
-            g.drawImage(fire5, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire5, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 71 && timer <= 105) {
-            g.drawImage(fire4, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire4, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 106 && timer <= 140) {
-            g.drawImage(fire3, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire3, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 141 && timer <= 175) {
-            g.drawImage(fire2, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire2, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
         if (timer >= 176 && timer <= 210) {
-            g.drawImage(fire1, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
+            g.drawImage(fire1, playerDrawnRect.x + 43, playerDrawnRect.y + 73, 10, 15, null);
         }
-
         // Draws the ship tilting depending on which way the player is moving
         if (tilt == 0) {
-            g.drawImage(rocket, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+            g.drawImage(rocket, playerDrawnRect.x, playerDrawnRect.y, playerDrawnRect.width, playerDrawnRect.height, null);
         }
         if (tilt == -1) {
-            g.drawImage(rocketLeft, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+            g.drawImage(rocketLeft, playerDrawnRect.x, playerDrawnRect.y, playerDrawnRect.width, playerDrawnRect.height, null);
         }
         if (tilt == 1) {
-            g.drawImage(rocketRight, playerRect.x, playerRect.y, playerRect.width, playerRect.height, null);
+            g.drawImage(rocketRight, playerDrawnRect.x, playerDrawnRect.y, playerDrawnRect.width, playerDrawnRect.height, null);
         }
 
         if (updateClock.instant().compareTo(update) >= 0) { //updates clock cycle
@@ -610,34 +677,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         repaint(); // Repaints the screen
 
     }
-
-    // Resets the clock
-    public void resetUpdateClock() {
-        temp = Clock.offset(updateClock, Duration.ofMillis(4));
-        update = temp.instant();
-        //clock2 = clock2.plusSeconds(2);
-    }
-
-    public final void print(Object b) {
-        System.out.println(b);
-        //this makes printing easier
-    }
-
-    public void playerMovement() { // This method will handle movement speed
-
-        if (left) { // This moves player left
-            // System.out.println("Left");
-            playerRect.x = playerRect.x - moveSpeed;
-        }
-        if (right) { // This moves player right
-            //  System.out.println("Right");
-            playerRect.x = playerRect.x + moveSpeed;
-
-        }
-        playerRect.x += playerX;
-
-    }
-
+    
     public static void main(String[] args) throws MalformedURLException {
         ProfHack2020 game = new ProfHack2020();
         JFrame frame = new JFrame();
@@ -649,7 +689,13 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
+    // Shows the ending score and then exits
+    public void gameOver() {
+        JOptionPane.showMessageDialog(null, "GAME OVER! Your Score was: " + Score);
+        System.exit(0);
+    }
+    
+// KeyListener INPUTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void keyTyped(KeyEvent ke) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
