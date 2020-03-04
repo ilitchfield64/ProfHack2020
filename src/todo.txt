@@ -1,0 +1,11 @@
+Things To Do
+- Music not working in jar
+- Fix the player hit box 
+    // It is too far right
+- Add Difficulties
+- Reorganize the code more
+    // It's a mess
+    // Make it more object oriented and less procedural
+        - Start implementing true enemy objects
+- Have one uniform screen instead of JOptionPanes controlling title and game over
+- Measure the distance from end to end and use it to implement either levels or increasing difficulty
