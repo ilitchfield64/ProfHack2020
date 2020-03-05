@@ -6,6 +6,7 @@
 package profhack2020;
 
 import java.io.File;
+import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -18,10 +19,10 @@ import javax.swing.JOptionPane;
 public class music {
     void playMusic(String musicLocation){
         try{
-            File musicPath = new File(musicLocation);
+            URL url = this.getClass().getResource(musicLocation); // This Object allows the files to be loaded from inside of a jar!!!!
             
-            if(musicPath.exists()){
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+            if(true){
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
