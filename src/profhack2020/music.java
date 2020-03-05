@@ -17,35 +17,31 @@ import javax.swing.JOptionPane;
  * @author Gavin
  */
 public class music {
-    void playMusic(String musicLocation){
-        try{
+
+    boolean playing = false;
+
+    void playMusic(String musicLocation) {
+        try {
             URL url = this.getClass().getResource(musicLocation); // This Object allows the files to be loaded from inside of a jar!!!!
-            
-            if(true){
+
+            if (!playing) {
+
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
                 Clip clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
                 
+
                 //JOptionPane.showConfirmDialog(null, "Hit ok to pause");
                 //long clipTimePostion = clip.getMicrosecondPosition();
                 //clip.stop();
-                
                 //JOptionPane.showMessageDialog(null, "Hit ok to resume");
                 //clip.setMicrosecondPosition(clipTimePostion);
                 //clip.start();
-                
-            }else{
+            } else {
                 System.out.println("Can't find file");
             }
-            
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-        
-    }
-    
-}
 
+        } catch (Exception ex) {
+          
+        }
+    }
+}
