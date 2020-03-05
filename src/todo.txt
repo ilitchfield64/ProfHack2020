@@ -1,11 +1,11 @@
 Things To Do
-- Music not working in jar
-- Fix the player hit box 
-    // It is too far right
+- Have the enemy bullets keep going when they are killed?
+    // May need to introduce enemies as separate objects? 
 - Add Difficulties
-- Reorganize the code more
-    // It's a mess
+ Rework and simplify code
     // Make it more object oriented and less procedural
         - Start implementing true enemy objects
 - Have one uniform screen instead of JOptionPanes controlling title and game over
-- Measure the distance from end to end and use it to implement either levels or increasing difficulty
+- Measure the distance traveled and use it to implement either levels or increasing difficulty
+- Add some sort of bosses
+    // Maybe switch perspective to rear view third person and have bosses like Andross in Star Fox 64
