@@ -39,7 +39,7 @@ public class MusicPlayer {
             ex.printStackTrace();
         }
     }
-    public void stopMusic(){
+    public void stop(){
         try {
             if (playing){
                 clip.stop();

@@ -82,15 +82,19 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     boolean spawnEnemy1 = false, spawnEnemy2 = false, spawnEnemy3 = false;
     boolean astroid1 = false, astroid2 = false, astroid3 = false;
     boolean startGame = false; // When false, Title Screen is displayed
-
-    int starSpeed = 3; // Starfield Movement speed
+    
+    long longDistance =0L;
+    
+    int starSpeed =2 ; // Starfield Movement speed
     int health = 100;
     int Score = 0;
-    int timerA = 0;
-    int timer = 0;
-    int timerF = 0;
-    int tilt = 0;
-
+    // Timers
+    int astroidTimer = 0;
+    int playerFireAnimationTimer = 0;
+    int timerF = 0; // Don't know what the point of this timer is?
+    int physicsTimer = 0;
+    final long C = 300_000_000; 
+ 
 // Player Variables
     int playerX = 0;
     int bulletY = 0;
@@ -98,6 +102,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     int astroidSpeed = 3;
     int clipSize = 3; // Special Move counter? 
     int moveSpeed = 3; // Player Movement Spee
+    int tilt = 0;
 
 // Imported files
     MusicPlayer BGM = new MusicPlayer();
@@ -121,7 +126,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         BGM.playMusic();
 
         JOptionPane.showMessageDialog(null, "", "Space Escape: Fight For Your Life", JOptionPane.INFORMATION_MESSAGE, icon);
-        BGM.stopMusic();
+        BGM.stop();
         // Plays the background music
         BGM.setMusicLoop("bgm1.wav");
         BGM.playMusic();
@@ -209,7 +214,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
         } else {
             enemyRect.x = Gen.nextInt((SCREEN_WIDTH - 100)) + 25;
-            // int distance = Gen.nextInt(100) + 50;
+            int distance = Gen.nextInt(100) + 50;
             spawnEnemy1 = true;
         }
     }
@@ -291,8 +296,8 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         // This code handles enemy "AI"
         if ((spawnEnemy() == 1) || spawnEnemy1) {
             enemyEntersScreen1(enemyRect1);
-            int temp = Gen.nextInt(2);
-            if (temp == 0) {
+            int tmp = Gen.nextInt(2);
+            if (tmp == 0) {
                 enemyBulletRect1.x = enemyRect1.x + 22;
                 if (enemyBulletRect1.y < SCREEN_HEIGHT) {
                     enemyBulletRect1.y += bulletSpeed;
@@ -477,50 +482,57 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     }
 
     public void timers() {
-        timerA++;
+        // Update Timers
+        astroidTimer++;
         timerF++;
-        timer++;
+        playerFireAnimationTimer++;
 
-        if (timer
-                >= 210) {
-            timer = 0;
+        // Used to track actual speeds in 1 second
+        physicsTimer++;
+
+
+        if (physicsTimer > 19){ // Tracks about 10km/s in 19 ticks
+            longDistance+=1;
+            physicsTimer = 0;
+
         }
-
-        if (timerF
-                < 5) {
+        // Cycles the player animations
+        if (playerFireAnimationTimer >= 210) {
+            playerFireAnimationTimer = 0;
+        }
+        // Unkown Timer, probably no used
+        if (timerF < 5) {
             timerF++;
 
         }
-        if (timerF
-                < 5) {
+        if (timerF < 5) {
             timerF++;
-        } else if (timerF >= 5 && timerF
-                <= 10) {
+        } else if (timerF >= 5 && timerF <= 10) {
             timerF++;
         }
-        if (timerF
-                >= 10) {
+        if (timerF >= 10) {
             timerF = 0;
         }
 
-        if (timerA >= 500 && timerA <= 550) {
+        if (astroidTimer >= 500 && astroidTimer <= 550) {
             astroid1 = true;
         }
-        if (timerA == 500 + Gen.nextInt(400)) {
+        if (astroidTimer == 500 + Gen.nextInt(400)) {
             astroid2 = true;
         }
-        if (timerA == 500 + Gen.nextInt(200)) {
+        if (astroidTimer == 500 + Gen.nextInt(200)) {
             astroid3 = true;
         }
-        if (timerA
+        if (astroidTimer
                 >= 1000) {
-            timerA = 0;
+            astroidTimer = 0;
         }
 
     }
 
     // Loops the program    
     public void update() {
+        //++distance;
         timers();               // Global game timing
         starfield();            // How the starfield is randomized
         spawnAstroids();        // Astroids are generated randomly    
@@ -557,41 +569,41 @@ public class ProfHack2020 extends JPanel implements KeyListener {
     // Creates the 6 frame fire animation on the rear of the rocket
     public void fireAnimation(Graphics g) {
         // Fire Animation
-        if (timer <= 35) {
+        if (playerFireAnimationTimer <= 35) {
             g.drawImage(fire1, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 36 && timer <= 70) {
+        if (playerFireAnimationTimer >= 36 && playerFireAnimationTimer <= 70) {
             g.drawImage(fire2, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 71 && timer <= 105) {
+        if (playerFireAnimationTimer >= 71 && playerFireAnimationTimer <= 105) {
             g.drawImage(fire3, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 106 && timer <= 140) {
+        if (playerFireAnimationTimer >= 106 && playerFireAnimationTimer <= 140) {
             g.drawImage(fire4, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 141 && timer <= 175) {
+        if (playerFireAnimationTimer >= 141 && playerFireAnimationTimer <= 175) {
             g.drawImage(fire5, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 176 && timer <= 210) {
+        if (playerFireAnimationTimer >= 176 && playerFireAnimationTimer <= 210) {
             g.drawImage(fire6, playerRect.x + 22, playerRect.y + 73, 10, 15, null);
         }
 
-        if (timer <= 35) {
+        if (playerFireAnimationTimer <= 35) {
             g.drawImage(fire6, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 36 && timer <= 70) {
+        if (playerFireAnimationTimer >= 36 && playerFireAnimationTimer <= 70) {
             g.drawImage(fire5, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 71 && timer <= 105) {
+        if (playerFireAnimationTimer >= 71 && playerFireAnimationTimer <= 105) {
             g.drawImage(fire4, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 106 && timer <= 140) {
+        if (playerFireAnimationTimer >= 106 && playerFireAnimationTimer <= 140) {
             g.drawImage(fire3, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 141 && timer <= 175) {
+        if (playerFireAnimationTimer >= 141 && playerFireAnimationTimer <= 175) {
             g.drawImage(fire2, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
-        if (timer >= 176 && timer <= 210) {
+        if (playerFireAnimationTimer >= 176 && playerFireAnimationTimer <= 210) {
             g.drawImage(fire1, playerRect.x + 43, playerRect.y + 73, 10, 15, null);
         }
     }
@@ -643,6 +655,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
         g.setFont(font);
         g.drawString("Health: " + health + "%", 15, 25);
         g.drawString("Score: " + score, 15, 50);
+        g.drawString("Distance From Earth: "+ longDistance +"km", 15, SCREEN_HEIGHT-25);
 
     }
 
@@ -679,6 +692,7 @@ public class ProfHack2020 extends JPanel implements KeyListener {
 
     // Shows the ending score and then exits
     public void gameOver() {
+        BGM.stop();
         JOptionPane.showMessageDialog(null, "GAME OVER! Your Score was: " + Score);
         System.exit(0);
     }
